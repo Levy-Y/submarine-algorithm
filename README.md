@@ -29,10 +29,6 @@ pip install tkinter matplotlib numpy customtkinter
 ## Screenshots of the project
 ![Screenshot](https://github.com/Levy-Y/submarine-algorithm/blob/main/ScreenShots/beta-v1.0-release-screenshot.PNG)
 
-## Contributing
-
-Contributions to Pearlhunt are welcome. Please feel free to fork the repository, make changes, and submit a pull request.
-
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
