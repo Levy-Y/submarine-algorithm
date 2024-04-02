@@ -27,7 +27,7 @@ pip install tkinter matplotlib numpy customtkinter
 4. **Start Algorithm**: Click the "Start Algorithm" button to run the MOHO algorithm and visualize the most efficient path for collecting pearls.
 
 ## Screenshots of the project
-![https://github.com/Levy-Y/submarine-algorithm/blob/main/ScreenShots/beta-v1.0-release-screenshot.PNG](Release)
+![Screenshot]([Release](https://github.com/Levy-Y/submarine-algorithm/blob/main/ScreenShots/beta-v1.0-release-screenshot.PNG))
 
 ## Contributing
 
