@@ -1,4 +1,4 @@
-# Az algoritmus a következőképpen működik:
+# A MOHO algoritmus a következőképpen működik:
 
 1. Az összes gyöngy közül kiválasztja azokat, amelyeknek az értéke eléri a moho_min értéket.
 2. A kiindulópontot (origo) hozzáadja az útvonalhoz.
