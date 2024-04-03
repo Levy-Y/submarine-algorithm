@@ -14,7 +14,7 @@ Pearlhunt is a Python-based application designed to simulate the process of hunt
 - **Customizable Parameters**: Users can adjust various parameters such as the maximum coordinates, minimum and maximum values for pearls, and the number of pearls to generate or import.
 
 ## Algorithm explained (HU):
-![Algorithm](algorithm_en-US.md)
+[Algorithm](algorithm_en-US.md)
 
 ## Installation
 
