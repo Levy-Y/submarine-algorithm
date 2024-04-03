@@ -5,17 +5,20 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from matplotlib.widgets import RangeSlider
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.backends.backend_pdf as pdf
 import customtkinter as ctk
 import numpy as np
 
 global pearlsGlobal
 pearlsGlobal = []
 
+# Function to calculate the distance between two points
 def distanceOfPoints(point1: dict, point2: dict):
     distPlane = np.sqrt(np.abs(point1['x'] - point2['x'])**2 + np.abs(point1['y'] - point2['y'])**2)
     distSpace = np.sqrt(distPlane**2 + np.abs(point1['z'] - point2['z']))
     return distSpace
 
+# Function to generate random points
 def generate_random_points(min_coord, max_x_coord, max_y_coord, max_z_coord, min_value, max_value, num_points):
     points = []
     for _ in range(num_points):
@@ -27,35 +30,40 @@ def generate_random_points(min_coord, max_x_coord, max_y_coord, max_z_coord, min
         points.append(point)
     return points
 
+# Function to browse a file
 def browse_file():
     file_path = tk.filedialog.askopenfilename()
 
     pearls = []
-    with open(file_path) as f:
-        data = f.read()
-        lines = data.split('\n')[1:]
-        pearls = []
-        for line in lines:
-            if line.strip():
-                values = line.split(';')
-                distFromOrigo = distanceOfPoints({'x': 0, 'y': 0, 'z': 0}, {'x': int(values[0]), 'y': int(values[1]), 'z': int(values[2])})
-                pearl = {'x': int(values[0]), 'y': int(values[1]), 'z': int(values[2]), 'price': int(values[3]), 'distFromOrigo': distFromOrigo}
-                pearls.append(pearl)
+    try:
+        with open(file_path) as f:
+            data = f.read()
+            lines = data.split('\n')[1:]
+            pearls = []
+            for line in lines:
+                if line.strip():
+                    values = line.split(';')
+                    distFromOrigo = distanceOfPoints({'x': 0, 'y': 0, 'z': 0}, {'x': int(values[0]), 'y': int(values[1]), 'z': int(values[2])})
+                    pearl = {'x': int(values[0]), 'y': int(values[1]), 'z': int(values[2]), 'price': int(values[3]), 'distFromOrigo': distFromOrigo}
+                    pearls.append(pearl)
 
-        global pearlsGlobal
-        pearlsGlobal = pearls
+            global pearlsGlobal
+            pearlsGlobal = pearls
 
-    prices = [pearl['price'] for pearl in pearls]
-    sizes = np.array([pearl['price'] * 10 for pearl in pearls])
+        prices = [pearl['price'] for pearl in pearls]
+        sizes = np.array([pearl['price'] * 10 for pearl in pearls])
 
-    x_coords = [pearl['x'] for pearl in pearls]
-    y_coords = [pearl['y'] for pearl in pearls]
-    z_coords = [pearl['z'] for pearl in pearls]
+        x_coords = [pearl['x'] for pearl in pearls]
+        y_coords = [pearl['y'] for pearl in pearls]
+        z_coords = [pearl['z'] for pearl in pearls]
 
-    ax.scatter(x_coords, y_coords, z_coords, s=sizes)
-    warning_text.pack_forget()
-    show_algorithm()
+        ax.scatter(x_coords, y_coords, z_coords, s=sizes)
+        warning_text.pack_forget()
+        show_algorithm()
+    except ValueError:
+        messagebox.showerror("Error", "Invalid file format, please make sure the file is in the correct format!")
 
+# Function to generate random points
 def generate_points():
     max_x_coord = int(max_x_coord_slider.get())
     max_y_coord = int(max_y_coord_slider.get())
@@ -81,6 +89,7 @@ def generate_points():
     else:
         return
 
+# Function to empty the graph
 def empty_graph(ax):
     ax.clear()
     root.update()
@@ -90,10 +99,12 @@ def empty_graph(ax):
     ax.set_zlabel('Z')
     ax.set_title('Pearlhunt')
 
+# Function to remove lines from the graph
 def remove_lines(ax):
     for line in ax.lines:
         line.remove()
 
+# Function to select an algorithm
 def start_algorithm():
     if ax.has_data():
         algorithm = algorith_selector.get()
@@ -106,6 +117,21 @@ def start_algorithm():
     else:
         messagebox.showerror("Error", "No data is imported yet, please select one and add some data to the graph!")
 
+# Function to save the graph to a PDF
+def save_to_pdf():
+    warning_popup = messagebox.askquestion("Warning", "Are you sure you want to save the graph to a PDF?\nNote: You won't be able to modify the graph anymore", icon='warning')
+    if warning_popup == 'no':
+        return
+    else:        
+        if ax.has_data():
+            file_path = tk.filedialog.asksaveasfilename(defaultextension=".pdf")
+            pdf_pages = pdf.PdfPages(file_path)
+            pdf_pages.savefig(fig)
+            pdf_pages.close()
+        else:
+            messagebox.showerror("Error", "No data is imported yet, please select one and add some data to the graph!")
+
+# Function to start the MOHO algorithm
 def start_moho(algorithm, moho_min, smart):
     if ax.has_data():    
         if algorithm == "MOHO":
@@ -133,6 +159,9 @@ def start_moho(algorithm, moho_min, smart):
                 distance_available -= distanceOfPoints(actualPeal, path[-1])
                 path.append(actualPeal)
             
+            collected_pearls = len(path)-1 if len(path) > 2 else 0
+            total_value = sum(pearl['price'] for pearl in path)
+            percentage_collected = round((collected_pearls / len(pearlsGlobal)) * 100, 0)
             if smart:
                 pass
             else:
@@ -142,24 +171,27 @@ def start_moho(algorithm, moho_min, smart):
                 ax.plot(x_coords, y_coords, z_coords, color='red')
 
                 ax.plot([path[-1]['x'], 0], [path[-1]['y'], 0], [path[-1]['z'], 0], color='red')
+
+                legend_text = f"Collected Pearls: {collected_pearls}\nTotal Value: {total_value}\nCollected Percentage: {round(percentage_collected, 0)}%"
+                ax.text2D(0.05, 0.95, legend_text, transform=ax.transAxes)
             
-            collected_pearls = len(path)-2 if len(path) > 3 else 0
-            total_value = sum(pearl['price'] for pearl in path)
-            percentage_collected = (collected_pearls / len(pearlsGlobal)) * 100
             if smart:
                 pass
             else:
                 messagebox.showinfo("Collected Pearls", f"Number of Pearls: {collected_pearls}\nTotal Value: {total_value}")
             
-            show_statistics(collected_pearls, total_value, percentage_collected)
-            
             return collected_pearls, total_value, moho_min
     else:
         messagebox.showerror("Error", "No data is imported yet, please select one and add some data to the graph!")
 
+# Function to start the smart MOHO algorithm
 def smart_moho():
     gathered_data = []
-    for i in range(9):
+    
+    prices = [pearl['price'] for pearl in pearlsGlobal]
+    unique_prices = list(set(prices))
+    
+    for i in unique_prices:
         loop_data = start_moho("MOHO", i, True)
         gathered_data.append(loop_data)
 
@@ -171,6 +203,8 @@ def smart_moho():
     treshold_text.configure(text=f"Value Treshold: {round(used_treshold, 0)}")
     start_moho("MOHO", used_treshold, False)
 
+
+# Customizing the tkinter GUI
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
 
@@ -181,6 +215,7 @@ root.geometry("800x800")
 graph_frame = ctk.CTkFrame(root)
 graph_frame.pack(side="right", fill="both", expand=True)
 
+# Creating the 3D graph
 fig = plt.Figure(figsize=(5, 4), dpi=100)
 
 ax = fig.add_subplot(111, projection='3d')
@@ -249,7 +284,8 @@ def disable_treshold_slider(*args):
         moho_treshold.configure(state="disabled")
     else:
         moho_treshold.configure(state="normal")
-
+        
+# Creating the widgets
 max_x_coord_text = ctk.CTkLabel(sidebar_frame, text="Max x Coordinate: 100.0")
 max_x_coord_slider = ctk.CTkSlider(sidebar_frame, from_=0, to=500, command=lambda x: update_max_x_coord(x))
 max_x_coord_slider.set(100)
@@ -288,6 +324,7 @@ algorith_selector.configure(values=["MOHO"])
 algorith_selector.set("MOHO")
 
 smart_checkbox = ctk.CTkCheckBox(algorithm_frame, text="Smart MOHO", command=lambda: disable_treshold_slider())
+smart_checkbox.select()
 
 time_text = ctk.CTkLabel(algorithm_frame, text="Time: 5 s", text_color="black")
 algorithm_time = ctk.CTkSlider(algorithm_frame, from_=1, to=300, command=lambda x: update_time(x))
@@ -297,14 +334,17 @@ algorithm_time.set(5)
 algorithm_speed.set(25)
 
 treshold_text = ctk.CTkLabel(algorithm_frame, text="Value Treshold: 9", text_color="black")
-moho_treshold = ctk.CTkSlider(algorithm_frame, from_=1, to=50, command=lambda x: update_treshold(x))
+moho_treshold = ctk.CTkSlider(algorithm_frame, from_=1, to=50, state="disabled", command=lambda x: update_treshold(x))
 moho_treshold.set(9)
 
 algorithm_start_button = ctk.CTkButton(algorithm_frame, text="Start Algorithm", width=200, command=lambda: start_algorithm())
 
+save_button = ctk.CTkButton(sidebar_frame, text="Save to PDF", width=200, command=lambda: save_to_pdf())
+
 note_label = ctk.CTkLabel(inputs_frame, text="Note: Due to limitations,\n the graph only updates when touched slightly,\n so to see any changes,\n you have to move the graph a bit!", text_color="black")
 note_label.pack(pady=10)
 
+# Miscellanous functions
 def show_statistics(collected_pearls, total_value, percentage):
     note_label.pack_forget()
     statistics_frame.pack(side="top", fill="x", pady=10)
@@ -328,6 +368,7 @@ def show_algorithm():
     treshold_text.pack(pady=5)
     moho_treshold.pack(pady=10)
     algorithm_start_button.pack(pady=10)
+    save_button.pack(pady=5)
     note_label.pack(pady=10)
 
 def toggle_visibility(value):
@@ -374,4 +415,5 @@ def toggle_visibility(value):
         pearls_number_text.pack_forget()
         pearls_number_slider.pack_forget()
 
+# Running the application
 root.mainloop()
