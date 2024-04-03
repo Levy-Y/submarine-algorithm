@@ -1,44 +1,46 @@
-# Pearlhunt: A Python Project for 3D Pearl Hunting
+### `Nyelvek`: **[HU]** [[EN](README_en_US.md)]
 
-Pearlhunt is a Python-based application designed to simulate the process of hunting for pearls in a 3D space. This project utilizes the Tkinter library for the graphical user interface (GUI), Matplotlib for 3D plotting, and NumPy for numerical operations. The application allows users to either import data from a file or generate random points representing pearls in a 3D space. It then applies an algorithm to determine the most efficient path for collecting these pearls based on their value and distance from the starting point (the origo).
+# Pearlhunt: Egy Python Projekt 3D Gyöngyvadászathoz
 
-## Features
+A Pearlhunt egy Python-alapú alkalmazás, amely szimulálja 3D térben a gyöngyvadászat folyamatát. Ez a projekt a Tkinter könyvtárat használja a grafikus felhasználói felület (GUI) létrehozásához, a Matplotlib-et a 3D ábrázoláshoz, és a NumPy-t numerikus műveletekhez. Az alkalmazás lehetővé teszi a felhasználóknak, hogy adatokat importáljanak egy fájlból vagy véletlenszerűen generáljanak pontokat, amelyek a 3D térben lévő gyöngyöket jelentik. Ezután egy útkereső algoritmust alkalmaz, amely meghatározza a leghatékonyabb utat a gyöngyök gyűjtéséhez, figyelembe véve értéküket és távolságukat a kiindulási ponttól (az origótól).
 
-- **3D Plotting**: Utilizes Matplotlib to plot pearls in a 3D space, allowing users to visualize the distribution of pearls.
-- **Data Importation**: Users can import data from a file, with each line representing a pearl with its coordinates and value.
-- **Random Point Generation**: Generates a specified number of random points within a defined range, each with a random value.
-- **Algorithm Execution**: Executes a MOHO (Multi-Objective Optimization Heuristic) algorithm to determine the most efficient path for collecting pearls based on their value and distance.
-- **Smart MOHO**: An advanced version of the MOHO algorithm that optimizes the value threshold for maximum pearl collection.
-- **Customizable Parameters**: Users can adjust various parameters such as the maximum coordinates, minimum and maximum values for pearls, and the number of pearls to generate or import.
+## Funkciók
 
-## Algorithm explained (HU):
-[Algorithm](algorithm_hu-HU.md)
+- **3D Ábrázolás**: A Matplotlib segítségével ábrázolja 3D térben a gyöngyöket, lehetővé téve a felhasználók számára a gyöngyök eloszlásának megfigyelését.
+- **Adatimportálás**: A felhasználók importálhatnak adatokat egy fájlból, ahol minden sor egy gyöngyöt képvisel a koordinátáival és értékével.
+- **Véletlenszerű Pontok Generálása**: Generál egy meghatározott számú véletlenszerű gyöngyöt egy meghatározott tartományban.
+- **Algoritmus Végrehajtása**: Végrehajt egy MOHO (Multi-Objective Optimization Heuristic) algoritmust, amely meghatároz egy optimális utat a gyöngyök gyűjtéséhez az értékük és távolságuk alapján.
+- **Intelligens MOHO**: A MOHO algoritmus fejlett változata, amely optimalizálja az érték küszöbértékét a maximális gyöngygyűjtés érdekében.
+- **Testreszabható Paraméterek**: A felhasználók testreszabhatják a maximális koordinátákat, a gyöngyök minimális és maximális értékeit, a generálandó vagy importálandó gyöngyök számát.
 
-## Installation
+## Algoritmus magyarázat:
+[Algoritmus](algorithm_hu-HU.md)
 
-To run Pearlhunt, ensure you have Python installed on your system. Then, install the required libraries using pip:
+## Telepítés
+
+A Pearlhunt futtatásához győződjön meg róla, hogy a Python telepítve van a rendszerén. Ezután telepítse a szükséges könyvtárakat a pip segítségével:
 
 ```batch
 pip install matplotlib numpy customtkinter
 ```
-Or
+Vagy
 
 ```
-Run the setup.bat script, and it will setup all the required dependencies for the app
+Futtassa a setup.bat szkriptet, és beállítja az alkalmazás összes szükséges könyvtárát
 ```
 
-## Usage
+## Használat
 
-1. **Run the Application**: Execute the Python script to launch the Pearlhunt GUI.
-2. **Choose Data Source**: Select whether to import data from a file or generate random points.
-- **Configure Parameters**: Adjust the parameters for maximum coordinates, minimum and maximum values for pearls, and the number of pearls to generate.
-3. **Configure the Algorithm**: Configure the speed and the available time to your liking, and wether to use smart MOHO or not (smart MOHO is enabled by default).
-4. **Start Algorithm**: Click the "Start Algorithm" button to run the MOHO algorithm and visualize the most efficient path for collecting pearls.
-5. **Save to PDF**: Additionally you can save the graph into a .pdf file, if you want to.
+1. **Futtassa az Alkalmazást**: Futtassa a Python szkriptet a Pearlhunt GUI elindításához.
+2. **Válassza ki az Adatforrást**: Válassza ki, hogy importálja-e az adatokat egy fájlból vagy generálja-e véletlenszerű pontokat.
+- **Konfigurálja a Paramétereket**: Állítsa be a maximális koordinátákat, a gyöngyök minimális és maximális értékeit, és a generálandó gyöngyök számát.
+3. **Konfigurálja az Algoritmust**: Állítsa be a sebességet és a rendelkezésre álló időt a kívánságainak megfelelően, és döntse el, hogy használja-e az intelligens MOHO-t (az intelligens MOHO alapértelmezetten engedélyezve van).
+4. **Indítsa el az Algoritmust**: Kattintson a "Start Algorithm" gombra, hogy futtassa a MOHO algoritmust és vizualizál egy optimális utat a gyöngyök gyűjtéséhez.
+5. **Mentés PDF-be**: Továbbá mentheti a gráfot egy .pdf fájlba, ha szeretné.
 
-## Screenshot of the project
+## Screenshotok a projektről
 ![Screenshot](https://github.com/Levy-Y/submarine-algorithm/blob/main/ScreenShots/beta-v1.0-release-screenshot.PNG)
 
-## License
+## Licensz
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+Ez a projekt az MIT Licenc alatt áll. Lásd a `LICENSE` fájlt a részletekért.
